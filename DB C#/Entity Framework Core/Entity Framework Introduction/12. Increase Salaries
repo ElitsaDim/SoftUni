@@ -1,0 +1,29 @@
+ public static string IncreaseSalaries(SoftUniContext context)
+        {
+            IQueryable<Employee> employeeToIncreaseSalary = context
+                .Employees
+                .Where(e => e.Department.Name == "Engineering" || e.Department.Name == "Tool Design" ||
+               e.Department.Name == "Marketing" || e.Department.Name == "Information Services");
+
+            foreach (Employee e in employeeToIncreaseSalary)
+            {
+                e.Salary += e.Salary * 0.12m;
+            }
+
+            context.SaveChanges();
+
+            var employeeToDisplay = employeeToIncreaseSalary
+                .Select(e => new { e.FirstName, e.LastName, e.Salary })
+                .OrderBy(e => e.FirstName)
+                .ThenBy(e => e.LastName)
+                .ToArray();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var e in employeeToDisplay)
+            {
+                sb.AppendLine($"{e.FirstName} {e.LastName} (${e.Salary:f2})");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
