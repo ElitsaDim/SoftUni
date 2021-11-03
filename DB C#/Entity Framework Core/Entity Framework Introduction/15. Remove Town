@@ -1,0 +1,31 @@
+public static string RemoveTown(SoftUniContext context)
+        {
+            Address[] seattleAddresses = context
+                .Addresses
+                .Where(a => a.Town.Name == "Seattle")
+                .ToArray();
+
+            Employee[] emloyeeInSeattle = context
+                .Employees
+                .ToArray()
+                .Where(e => seattleAddresses.Any(a => a.AddressId == e.AddressId))
+                .ToArray();
+
+            foreach (Employee e in emloyeeInSeattle)
+            {
+                e.AddressId = null;
+            }
+
+            context.Addresses.RemoveRange(seattleAddresses);
+
+            Town seattleTown = context
+                .Towns
+                .First(t => t.Name == "Seattle");
+
+            context.Remove(seattleTown);
+
+            context.SaveChanges();
+
+            return $"{seattleAddresses.Length} addresses in Seattle were deleted";
+
+        }
