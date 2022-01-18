@@ -1,4 +1,4 @@
-﻿using Problem_1.Models;
+using Problem_1.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ namespace Problem_1
     {
         static void Main(string[] args)
         {
-            List<string> info = System.IO.File.ReadAllLines(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Data\data.txt")).ToList();
+            List<string> info = File.ReadAllLines("./data.txt").ToList();            
             List<string> result = new List<string>();
             string[] carAddInfo = new string[2];
             string[] trackAddInfo = new string[3];
@@ -44,14 +44,9 @@ namespace Problem_1
 
             result.Reverse();
 
-            using (StreamWriter writer = new StreamWriter(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Data\result.txt"), true))
-            {
-                foreach (var vehicle in result)
-                {
-                    writer.WriteLine(vehicle);
-                }
-                writer.Close();
-            }
+            File.WriteAllLines("./result.txt", result);
+
+           
         }    
     }
 }
